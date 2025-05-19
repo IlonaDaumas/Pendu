@@ -29,3 +29,14 @@ def choisir_mot(liste_de_mots):
     return
 
 
+#Fonction qui demande une lettre à l'utilisateur
+def demander_lettre(lettres_deja_donnees):
+    lettre = input('Entrez une lettre : ')
+    # Boucle pour s'assurer que la lettre n'a pas été donnée avant
+    while lettre in lettres_deja_donnees:
+        print('Cette lettre a déjà été donnée.')
+        lettre = input('Entrez une nouvelle lettre : ')
+    lettres_deja_donnees.extend(lettre)
+    return lettres_deja_donnees
+
+
