@@ -26,7 +26,7 @@ def creer_liste_mots(fichier="mots_pendu.txt"):
 # Fonction pour le choix du mot
 def choisir_mot(liste_de_mots):
     mot = random.choice(liste_de_mots)
-    return
+    return mot
 
 
 # Fonction qui enlève les accents du mot choisi
@@ -66,7 +66,7 @@ def demander_lettre(lettres_deja_donnees):
         lettre = input('Entrez une nouvelle lettre : ')
     # on ajoute la nouvelle lettre à la liste des lettres déjà données
     lettres_deja_donnees.extend(lettre)
-    return lettres_deja_donnees
+    return lettre
 
 # Fonction pour l'affichace caché du mot pendant la partie
 def afficher_mot(mot, liste_lettres_trouvees) :
@@ -85,3 +85,50 @@ def afficher_mot(mot, liste_lettres_trouvees) :
     return affichage_mot
 
 
+# Fonction qui permet de faire une partie de pendu
+def jouer(fichier="mots_pendu.txt") :
+    # on crée la liste des mots  possibles
+    liste_mots_possibles = creer_liste_mots(fichier)
+    # le mot est choisi aléatoirement
+    mot = choisir_mot(liste_mots_possibles)
+    # on enlève les accents au mot
+    mot_sans_accent = enlever_accents(mot)
+    # on crée une liste vide à laquelle on ajoutera les lettres testées au cours de la partie
+    liste_lettres_testées = []
+    # on affiche le mot sans les lettres pour que l'utilisateur puisse connaitre le nombre de lettres
+    mot_affichage = afficher_mot(mot_sans_accent, liste_lettres_testées)
+    print(mot_affichage)
+    # on initialise le nombre de tentatives à 0
+    tentatives = 0
+
+    # on boucle tant que le mot n'est pas trouvé et tant que le nombre de tentatives est inférieure à 6
+    while ('_' in mot_affichage) and tentatives < 6 :
+        # on demande une lettre l'utilisateur
+        lettre_testee = demander_lettre(liste_lettres_testées)
+        # on affiche le mot en prenant compte cette nouvelle lettre
+        mot_affichage = afficher_mot(mot_sans_accent, liste_lettres_testées)
+        print(mot_affichage)
+
+        # on ajoute 1 aux nombres de tentatives si la lettre n'est pas dans le mot
+        if lettre_testee not in mot_sans_accent:
+            tentatives += 1
+            print("Cette lettre ne fait pas partie du mot.")
+        else:
+            print("Cette lettre fait partie du mot !")
+
+    if '_' in mot_affichage :
+        print('Désolé vous avez perdu la partie, le mot était : ', mot)
+    else :
+        print('Bravo vous avez gagné, le mot était bien : ', mot)
+
+    # demander à l'utilisateur si il veur rejouer
+    nouvelle_partie = input('Entrez oui si vous voulez rejouer, non sinon : ')
+    if nouvelle_partie == 'oui' :
+        print(jouer(fichier))
+    else :
+        print('Bonne journée !')
+    return
+
+
+
+print(jouer())
