@@ -2,6 +2,7 @@
 
 import random
 import os
+import string
 
 # Fonction pour créer une liste liste de mots à partir d'un fichier txt
 def creer_liste_mots(fichier="mots_pendu.txt"):
@@ -31,12 +32,13 @@ def choisir_mot(liste_de_mots):
 
 # Fonction qui enlève les accents du mot choisi
 def enlever_accents(mot) :
-    #chaîne de caractère étant immuable, il faut créer un nouveau mot sans rien auquel on ajoutera les lettres sans accents du mot
+    #chaîne de caractère étant immuable, il faut créer un nouveau mot vide
+    # auquel on ajoutera les lettres sans accents du mot
     mot_sans_accent = ""
     i = 0
     # Boucle sur le nombre de lettre du mot
     while i < len(mot) :
-        # Conditions pour enlever les accents des lettres avec
+        # Conditions pour enlever les accents des lettres
         if mot[i] == 'à' or mot[i] == 'â' or mot[i] == 'ä' :
             mot_sans_accent += 'a'
         elif mot[i] == 'é' or mot[i] == 'è' or mot[i] == 'ê' or mot[i] == 'ë' :
@@ -84,6 +86,32 @@ def afficher_mot(mot, liste_lettres_trouvees) :
         i += 1
     return affichage_mot
 
+# Fonction pour donner un indice
+def donner_indice(mot,  liste_lettres_donnees) :
+    # on définit une chaine de caractère avec toutes les lettres de l'alphabet
+    alphabet = string.ascii_lowercase
+    # on met les lettres de l'alphabet dans une liste
+    liste_alphabet = list(alphabet)
+    # on met les lettres du mot dans une liste
+    liste_lettres_mots = list(mot)
+    # on crée une liste vide qui contiendra les lettres du mot qui n'ont pas encore
+    # été donné par l'utilisateur
+    liste_lettres_non_presentes = []
+    # on crée une boucle sur toutes les lettres de la liste alphabet
+    for lettre in liste_alphabet :
+        # on fait une condition de façon à ce que si la lettre de l'alphabet n'est ni dans le mot
+        # ni dans la liste des lettres données, elle est mise dans la liste vide
+        # créée précédemment
+        if (lettre not in liste_lettres_mots) and (lettre not in liste_lettres_donnees) :
+            liste_lettres_non_presentes += lettre
+        else :
+            liste_lettres_non_presentes = liste_lettres_non_presentes
+    # avec random on choisit une des lettres du mot qui n'a pas été donnée
+    lettre_indice = random.choice(liste_lettres_non_presentes)
+    # on renvoie cette lettre
+    return lettre_indice
+
+
 
 # Fonction qui permet de faire une partie de pendu
 def jouer(fichier="mots_pendu.txt") :
@@ -101,7 +129,7 @@ def jouer(fichier="mots_pendu.txt") :
     # on initialise le nombre de tentatives à 0
     tentatives = 0
 
-    # on boucle tant que le mot n'est pas trouvé et tant que le nombre de tentatives est inférieure à 6
+    # on boucle tant que le mot n'est pas trouvé et tant que le nombre d'erreur est inférieure à 6
     while ('_' in mot_affichage) and tentatives < 6 :
         # on demande une lettre l'utilisateur
         lettre_testee = demander_lettre(liste_lettres_testées)
@@ -113,8 +141,15 @@ def jouer(fichier="mots_pendu.txt") :
         if lettre_testee not in mot_sans_accent:
             tentatives += 1
             print("Cette lettre ne fait pas partie du mot.")
+            # on ajoute la fonction indice qui donnera une lettre non présente dans le mot avant
+            # la dernière tentative de l'utilisateur
+            if tentatives == 5:
+                indice = donner_indice(mot_sans_accent, liste_lettres_testées)
+                print('La lettre ', indice, ' ne fait pas partie du mot que vous recherchez')
+
         else:
             print("Cette lettre fait partie du mot !")
+
 
     if '_' in mot_affichage :
         print('Désolé vous avez perdu la partie, le mot était : ', mot)
@@ -128,7 +163,6 @@ def jouer(fichier="mots_pendu.txt") :
     else :
         print('Bonne journée !')
     return
-
 
 
 print(jouer())
