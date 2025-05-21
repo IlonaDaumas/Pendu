@@ -14,4 +14,4 @@ La dernière fonction s'appelle jouer et permet alors à l'utilisateur de faire 
 
 ## Comment jouer ? 
 L'utilisateur doit tout d'abord télécharger le projet.
-Pour lancer une partie, l'utilisateur doit rentrer dans le code python print(jouer()). Si l'utilisateur veut jouer avec la lste de mot par défaut, il n'a pas besoin de rentrer d'argument dans la fonction jouer(). Si il veut jouer avec sa propre liste de mots, il peut rentrer le nom d'un fichier txt, fichier qu'il faudra mettre dans le dossier du jeu si il veut pouvoir l'utiliser.
+Pour lancer une partie, l'utilisateur doit rentrer dans le code python print(jouer()). Si l'utilisateur veut jouer avec la lste de mot par défaut, il n'a pas besoin de rentrer d'argument dans la fonction jouer(). Si il veut jouer avec sa propre liste de mots, il peut mettre en entrée de la fonction jouer le nom de son fichier txt, fichier qu'il faudra mettre dans le dossier du jeu si il veut pouvoir l'utiliser.
