@@ -1,10 +1,12 @@
-# Ce script est rempli de fonctions permettant à la fin de jouer au jeu du pendu
+# Ce script est rempli de fonctions permettant à la fin à l'utilisateur
+# de jouer au jeu du pendu
 
 import random
 import os
 import string
 
 # Fonction pour créer une liste liste de mots à partir d'un fichier txt
+# Cette fonction est pris de Marlène Sanjosé avec quelques changement afin de fonctionner pour le cas
 def creer_liste_mots(fichier="mots_pendu.txt"):
     # teste si le fichier existe
     full_filename = os.path.join(fichier)
@@ -24,21 +26,21 @@ def creer_liste_mots(fichier="mots_pendu.txt"):
     return word_list
 
 
-# Fonction pour le choix du mot
+# Fonction qui prend une liste de mots et renvoie un des mots aléatoirement
 def choisir_mot(liste_de_mots):
     mot = random.choice(liste_de_mots)
     return mot
 
 
-# Fonction qui enlève les accents du mot choisi
+# Fonction qui enlève les accents du mot donné en entrée
 def enlever_accents(mot) :
-    #chaîne de caractère étant immuable, il faut créer un nouveau mot vide
+    # les chaînes de caractères étant immuables, il faut créer un nouveau mot vide
     # auquel on ajoutera les lettres sans accents du mot
     mot_sans_accent = ""
     i = 0
     # Boucle sur le nombre de lettre du mot
     while i < len(mot) :
-        # Conditions pour enlever les accents des lettres
+        # Conditions pour envoyer la lettre sans accent correspondant à la lettre avec accent
         if mot[i] == 'à' or mot[i] == 'â' or mot[i] == 'ä' :
             mot_sans_accent += 'a'
         elif mot[i] == 'é' or mot[i] == 'è' or mot[i] == 'ê' or mot[i] == 'ë' :
@@ -55,11 +57,13 @@ def enlever_accents(mot) :
             mot_sans_accent += mot[i]
         # on ajoute 1 à l'indice i pour parcourir la longueur du mot
         i += 1
+    # le mot sans accent est renvoyé
     return mot_sans_accent
 
 
 
-# Fonction qui demande une lettre à l'utilisateur
+# Fonction qui demande de rentrer une lettre à l'utilisateur
+# cette fonction prend en entrée une liste de lettres déjà données par l'utilisateur
 def demander_lettre(lettres_deja_donnees):
     lettre = input('Entrez une lettre : ')
     # Boucle pour s'assurer que la lettre n'a pas été donnée avant
@@ -68,6 +72,7 @@ def demander_lettre(lettres_deja_donnees):
         lettre = input('Entrez une nouvelle lettre : ')
     # on ajoute la nouvelle lettre à la liste des lettres déjà données
     lettres_deja_donnees.extend(lettre)
+    # la lettre donnée par l'utilisateur est renvoyée
     return lettre
 
 # Fonction pour l'affichace caché du mot pendant la partie
@@ -84,9 +89,11 @@ def afficher_mot(mot, liste_lettres_trouvees) :
             affichage_mot += '_'
         # on ajoute 1 à l'indice i pour parcourir la longueur du mot
         i += 1
+    # on renvoie le mot avec les ettres trouvées et les tirets
     return affichage_mot
 
-# Fonction pour donner un indice
+# Fonction pour donner un indice, soit une lettre qui ne fait pas partie de mot
+# et qui n'a pas été donnée
 def donner_indice(mot,  liste_lettres_donnees) :
     # on définit une chaine de caractère avec toutes les lettres de l'alphabet
     alphabet = string.ascii_lowercase
@@ -115,6 +122,7 @@ def donner_indice(mot,  liste_lettres_donnees) :
 
 # Fonction qui permet de faire une partie de pendu
 def jouer(fichier="mots_pendu.txt") :
+    print('Bonjour et bienvenue dans cette nouvelle partie du jeu du pendu')
     # on crée la liste des mots  possibles
     liste_mots_possibles = creer_liste_mots(fichier)
     # le mot est choisi aléatoirement
@@ -133,7 +141,7 @@ def jouer(fichier="mots_pendu.txt") :
     while ('_' in mot_affichage) and tentatives < 6 :
         # on demande une lettre l'utilisateur
         lettre_testee = demander_lettre(liste_lettres_testées)
-        # on affiche le mot en prenant compte cette nouvelle lettre
+        # on affiche le mot en prenant en compte cette nouvelle lettre
         mot_affichage = afficher_mot(mot_sans_accent, liste_lettres_testées)
         print(mot_affichage)
 
@@ -150,9 +158,10 @@ def jouer(fichier="mots_pendu.txt") :
         else:
             print("Cette lettre fait partie du mot !")
 
-
+    # après les 6 tentatives, si il reste des tirets dans le mot caché, la partie est perdue
     if '_' in mot_affichage :
         print('Désolé vous avez perdu la partie, le mot était : ', mot)
+    # sinon la partie est gagnée
     else :
         print('Bravo vous avez gagné, le mot était bien : ', mot)
 
@@ -164,5 +173,3 @@ def jouer(fichier="mots_pendu.txt") :
         print('Bonne journée !')
     return
 
-
-print(jouer())
